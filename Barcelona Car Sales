@@ -1,1 +1,40 @@
+CREATE TABLE Barcelonacarsales (
+[Brand] varchar (50),
+[Model] varchar (100),
+[Price (Euros)] int,
+[Year] int,
+[Mileage] int,
+[Fuel] varchar(50),
+[Gearbox] varchar (50),
+[Location] varchar (50),
+)
 
+BULK INSERT Barcelonacarsales
+FROM 'C:\Users\dustin.french\Documents\SQL Server Management Studio\Datasets\Barcelonacarsales clean.csv'
+WITH (FIRSTROW = 2, 
+FIELDTERMINATOR = ',',
+ROWTERMINATOR='\n',
+BATCHSIZE=250000)
+
+SELECT * FROM Barcelonacarsales
+
+
+SELECT Count(Distinct(Brand)) [Unique Car Brands], Count(Distinct(Model)) [Unique Models], Count(Distinct(Location)) [Unique Locations]
+FROM Barcelonacarsales
+
+Select avg([price (euros)]) [Average Price], AVG(Year)[Average Year], avg(mileage) [Average Mileage]
+FROM Barcelonacarsales
+
+SELECT Mileage, [Price (Euros)], Year
+FROM Barcelonacarsales
+WHERE Mileage > 200000
+ORDER BY Mileage ASC
+
+SELECT [Price (Euros)], Model
+FROM Barcelonacarsales 
+WHERE Model LIKE '%Benz%' AND [Price (Euros)] > 30000
+
+SELECT Location, Count(Location) Number, MAX([Price (Euros)]) AS [Max Price]
+FROM Barcelonacarsales	
+GROUP BY Location
+ORDER BY Number Desc
